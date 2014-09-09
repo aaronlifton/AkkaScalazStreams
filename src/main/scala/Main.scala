@@ -144,34 +144,11 @@ object JobTest {
       case Success(results) =>
         println(s":: Results(async=$async) ::")
         results foreach (r => println(s"  $r"))
-        system shutdown()
+        system terminate()
       case Failure(t) =>
         t printStackTrace()
-        system shutdown()
+        system terminate()
     }
-  }
-
-  def measure[A](a: => A) = {
-    def time[A](a: => A) = {
-      val now = System.nanoTime
-      val result = a
-      val micros = (System.nanoTime - now) / 1000
-      println("%d microseconds".format(micros))
-      result
-    }
-    time(a)
-  }
-
-  def measureTime = {
-    val time1 = measure {
-      runWithFutures(async = true)
-    }
-    println(s"Total time1: $time1")
-
-    val time2 = measure {
-      runWithFutures(async = false)
-    }
-    println(s"Total time2: $time2")
   }
 }
 
